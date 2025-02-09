@@ -59,9 +59,11 @@ public class UserRepository {
     }
 
     private void checkEmail(User currUser){
+
         if (currUser.getEmail() == null) {
             throw new ValidationException("email не может быть пустым");
         }
+
         for (User user : users.values()) {
             if (currUser.getEmail().equals(user.getEmail())) {
                 throw new DuplicatedDataException("Этот email уже используется");

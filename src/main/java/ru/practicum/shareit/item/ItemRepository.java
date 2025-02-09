@@ -69,12 +69,15 @@ public class ItemRepository {
     }
 
     private void checkItem(Item item) {
+
         if (item.getName() == null || item.getName().isBlank()) {
             throw new ValidationException("Имя должно быть указано");
         }
+
         if (item.getDescription() == null || item.getDescription().isBlank()) {
             throw new ValidationException("Описание должно быть указано");
         }
+
         if (item.getAvailable() == null) {
             throw new ValidationException("Доступность должна быть указано");
         }
