@@ -48,7 +48,7 @@ public class ItemController {
         return itemService.update(item, id, userId);
     }
 
-    private void checkUser(Long paramsUserId){
+    private void checkUser(Long paramsUserId) {
         if (paramsUserId == null) {
             throw new ValidationException("Id пользователя владельца должен быть указан");
         }

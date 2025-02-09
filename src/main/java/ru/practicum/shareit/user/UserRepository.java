@@ -58,7 +58,7 @@ public class UserRepository {
         return ++currentMaxId;
     }
 
-    private void checkEmail(User currUser){
+    private void checkEmail(User currUser) {
 
         if (currUser.getEmail() == null) {
             throw new ValidationException("email не может быть пустым");
