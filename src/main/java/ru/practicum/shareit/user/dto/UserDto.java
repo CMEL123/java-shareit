@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import jakarta.validation.constraints.Email;
 
@@ -10,9 +10,9 @@ import lombok.experimental.FieldDefaults;
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class UserDto {
     Long id;
     String name;
-    @Email(message = "Электронная почта должна соответствовать шаблону name@domain.xx")
+    @Email(message = "не валидный email")
     String email;
 }
