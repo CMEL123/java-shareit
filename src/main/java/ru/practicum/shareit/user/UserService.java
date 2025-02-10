@@ -24,13 +24,16 @@ public class UserService {
         return UserMapper.toUserDto(userRepository.findById(id));
     }
 
-    public UserDto create(User user) {
+    public UserDto create(UserDto userDto) {
         log.info("Добавление пользователя");
+        User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userRepository.create(user));
     }
 
-    public UserDto update(User user) {
+    public UserDto update(UserDto userDto, Long id) {
         log.info("Изменение пользователя");
+        User user = UserMapper.toUser(userDto);
+        user.setId(id);
         return UserMapper.toUserDto(userRepository.update(user));
     }
 

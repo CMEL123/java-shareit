@@ -7,6 +7,7 @@ import ru.practicum.shareit.user.User;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
     Long id;

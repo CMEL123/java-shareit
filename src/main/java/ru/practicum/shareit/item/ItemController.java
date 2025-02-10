@@ -3,9 +3,7 @@ package ru.practicum.shareit.item;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
@@ -18,8 +16,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping()
-    public List<ItemDto> findByUserId(@RequestHeader(value = userIdHeader, required = false) Long userId) {
-        checkUser(userId);
+    public List<ItemDto> findByUserId(@RequestHeader(value = userIdHeader) Long userId) {
         return itemService.findByUserId(userId);
     }
 
@@ -34,24 +31,16 @@ public class ItemController {
     }
 
     @PostMapping()
-    public ItemDto create(@Valid @RequestBody Item item,
-                          @RequestHeader(value = userIdHeader, required = false) Long userId) {
-        checkUser(userId);
+    public ItemDto create(@Valid @RequestBody ItemDto item,
+                          @RequestHeader(value = userIdHeader) Long userId) {
         return itemService.create(item, userId);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@Valid @RequestBody Item item,
-                          @RequestHeader(value = userIdHeader, required = false) Long userId,
+    public ItemDto update(@Valid @RequestBody ItemDto item,
+                          @RequestHeader(value = userIdHeader) Long userId,
                           @PathVariable Long id) {
-        checkUser(userId);
         return itemService.update(item, id, userId);
-    }
-
-    private void checkUser(Long paramsUserId) {
-        if (paramsUserId == null) {
-            throw new ValidationException("Id пользователя владельца должен быть указан");
-        }
     }
 }
 
