@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.comment;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,20 +12,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "bookings", schema = "public")
+@Table(name = "comments", schema = "public")
 @Getter
 @Setter
 @ToString
-public class Booking {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "start_date", nullable = false)
-    LocalDateTime startDate;
-
-    @Column(name = "end_date", nullable = false)
-    LocalDateTime endDate;
+    @Column(nullable = false, length = 2000)
+    String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
@@ -33,11 +30,10 @@ public class Booking {
     Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booker_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     @ToString.Exclude
-    User booker;
+    User author;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    Status status;
+    LocalDateTime created;
 }

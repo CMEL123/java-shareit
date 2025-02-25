@@ -32,4 +32,10 @@ public class ErrorHandler {
     public ErrorResponse handleArgumentNotValidException(final MethodArgumentNotValidException e) {
         return new ErrorResponse("Ошибка валидации", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleArgumentAccessException(final AccessException e) {
+        return new ErrorResponse("Ошибка доступа", e.getMessage());
+    }
 }
