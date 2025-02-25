@@ -130,7 +130,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Comment comment = CommentMapper.toCommentFromCreate(commentCreateDto, commentator, item);
-        return CommentMapper.toCommentDto( commentRepository.save(comment) );
+        return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
 
     private User checkUser(Long userId) {
