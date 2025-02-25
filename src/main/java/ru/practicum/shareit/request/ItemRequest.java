@@ -3,9 +3,6 @@ package ru.practicum.shareit.request;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.user.User;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
