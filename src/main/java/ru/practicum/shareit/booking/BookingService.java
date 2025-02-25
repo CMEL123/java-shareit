@@ -119,7 +119,7 @@ public class BookingService {
 
     private Booking checkBooking(Long bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
-        if  (booking.isPresent()){
+        if (booking.isPresent()) {
             log.info("Бронирование c id = {} найдено", bookingId);
             return booking.get();
         }
@@ -138,7 +138,7 @@ public class BookingService {
 
     private User checkUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if  (user.isPresent()){
+        if  (user.isPresent()) {
             log.info("Пользователь c id = {} найден", userId);
             return user.get();
         }
@@ -148,7 +148,7 @@ public class BookingService {
 
     private Item checkItem(Long itemId) {
         Optional<Item> item = itemRepository.findById(itemId);
-        if  (item.isPresent()){
+        if  (item.isPresent()) {
             log.info("Вещь c id = {} найдена", itemId);
             return item.get();
         }

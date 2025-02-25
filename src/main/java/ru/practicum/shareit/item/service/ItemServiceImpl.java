@@ -135,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
 
     private User checkUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if  (user.isPresent()){
+        if  (user.isPresent()) {
             log.info("Пользователь c id = {} найден", userId);
             return user.get();
         }
@@ -145,7 +145,7 @@ public class ItemServiceImpl implements ItemService {
 
     private Item checkItem(Long itemId) {
         Optional<Item> item = itemRepository.findById(itemId);
-        if  (item.isPresent()){
+        if  (item.isPresent()) {
             log.info("Вещь c id = {} найдена", itemId);
             return item.get();
         }

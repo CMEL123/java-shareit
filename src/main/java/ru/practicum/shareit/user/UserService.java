@@ -30,7 +30,7 @@ public class UserService {
 
     public UserDto findById(Long id) {
         Optional<User> user =  userRepository.findById(id);
-        if  (user.isPresent()){
+        if  (user.isPresent()) {
             log.info("Пользователь c id = {} найден", id);
             return UserMapper.toUserDto(user.get());
         }
