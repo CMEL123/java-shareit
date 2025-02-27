@@ -60,10 +60,10 @@ public class ItemServiceImpl implements ItemService {
         //  в lastbooking пишется последняя бронь вещи, но ее должен видеть только владелец,
         //  а не тот кто брал вещь, поэтому логично, что null
         if (Objects.equals(userId, item.get().getOwner().getId())) {
-            lastBooking = bookingRepository.findByItemIdAndEndDateBeforeOrderByEndDateDesc(
-                    itemId, LocalDateTime.now()).stream().findFirst();
-            nextBooking = bookingRepository.findByItemIdAndEndDateAfterOrderByEndDate(
-                    itemId, LocalDateTime.now()).stream().findFirst();
+            lastBooking = bookingRepository.findByItemIdAndEndDateBeforeAndStatusOrderByEndDateDesc(
+                    itemId, LocalDateTime.now(), Status.APPROVED).stream().findFirst();
+            nextBooking = bookingRepository.findByItemIdAndEndDateAfterAndStatusOrderByEndDate(
+                    itemId, LocalDateTime.now(), Status.APPROVED).stream().findFirst();
         }
 
         List<Comment> comments = commentRepository.findByItemId(itemId);

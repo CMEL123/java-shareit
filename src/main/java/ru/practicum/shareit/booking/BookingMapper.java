@@ -4,11 +4,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.dto.UserDto;
-
+import ru.practicum.shareit.user.UserMapper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
@@ -20,21 +19,11 @@ public class BookingMapper {
         dto.setStatus(booking.getStatus());
 
         if (booking.getBooker() != null) {
-            dto.setBooker(
-                new UserDto(
-                    booking.getBooker().getId(),
-                    booking.getBooker().getName(),
-                    booking.getBooker().getEmail()
-                )
-            );
+            dto.setBooker( UserMapper.toUserDto(booking.getBooker()));
         }
 
-
         if (booking.getItem() != null) {
-            ItemDto itemDto = new ItemDto();
-            itemDto.setId(booking.getItem().getId());
-            itemDto.setName(booking.getItem().getName());
-            dto.setItem(itemDto);
+            dto.setItem(ItemMapper.toItemDto(booking.getItem()));
         }
         return dto;
     }
