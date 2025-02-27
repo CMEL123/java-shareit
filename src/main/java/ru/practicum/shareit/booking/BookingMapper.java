@@ -19,7 +19,7 @@ public class BookingMapper {
         dto.setStatus(booking.getStatus());
 
         if (booking.getBooker() != null) {
-            dto.setBooker( UserMapper.toUserDto(booking.getBooker()));
+            dto.setBooker(UserMapper.toUserDto(booking.getBooker()));
         }
 
         if (booking.getItem() != null) {
