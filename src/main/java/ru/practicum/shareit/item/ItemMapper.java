@@ -1,7 +1,17 @@
 package ru.practicum.shareit.item;
 
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingMapper;
+import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemWithBookingsCommentsDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.comment.CommentMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
@@ -11,7 +21,22 @@ public class ItemMapper {
             item.getDescription(),
             item.getAvailable(),
             item.getOwner() != null ? item.getOwner().getId() : null,
-            item.getRequest() != null ? item.getRequest().getId() : null
+            item.getRequest() != null ? item.getRequest().getId() : null,
+            new ArrayList<>()
+        );
+    }
+
+    public static ItemDto toItemDto(Item item, List<Booking> bookings, List<Comment> comments) {
+        return  new ItemDto(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getOwner() != null ? item.getOwner().getId() : null,
+                item.getRequest() != null ? item.getRequest().getId() : null,
+                bookings.stream()
+                        .map(BookingMapper::toBookingDto)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -23,4 +48,21 @@ public class ItemMapper {
         item.setAvailable(itemDto.getAvailable());
         return item;
     }
+
+    public static ItemWithBookingsCommentsDto toItemWithBookingsCommentsDto(
+            Item item, Optional<Booking> lastBooking, Optional<Booking> nextBooking,List<Comment> comments) {
+        ItemWithBookingsCommentsDto dto = new ItemWithBookingsCommentsDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
+        dto.setOwnerId(item.getOwner().getId());
+        lastBooking.ifPresent(booking -> dto.setLastBooking(BookingMapper.toBookingDto(booking)));
+        nextBooking.ifPresent(booking -> dto.setNextBooking(BookingMapper.toBookingDto(booking)));
+        dto.setComments(comments.stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList()));
+        return dto;
+    }
+
 }
