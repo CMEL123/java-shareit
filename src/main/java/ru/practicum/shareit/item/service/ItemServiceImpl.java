@@ -17,14 +17,18 @@ import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.comment.CommentMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,6 +39,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     public List<ItemDto> findByUserId(Long userId) {
@@ -86,11 +91,26 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Map<Long, List<Item>> getItemsWithRequest() {
+        return itemRepository.findByRepositoryIsNotNull()
+                .stream()
+                .collect(Collectors.groupingBy(el -> el.getRequest().getId()));
+    }
+
+    @Override
+    public List<Item> getItemsByRequest(Long requestId) {
+        return itemRepository.findByRepositoryId(requestId);
+    }
+
+    @Override
     @Transactional
     public ItemDto create(ItemDto newItemDto, Long userId) {
         Item newItem = ItemMapper.toItem(newItemDto);
         checkNewItem(newItem);
         newItem.setOwner(checkUser(userId));
+        if (newItemDto.getRequest() != null) {
+            newItem.setRequest(checkItemRequest(newItemDto.getRequest()));
+        }
         return ItemMapper.toItemDto(itemRepository.save(newItem));
     }
 
@@ -151,6 +171,16 @@ public class ItemServiceImpl implements ItemService {
         }
         log.warn("Вещь с id = {} не найдена", itemId);
         throw new NotFoundException(String.format("Вещь с id=%d не найдена", itemId));
+    }
+
+    private ItemRequest checkItemRequest(Long itemRequestId) {
+        Optional<ItemRequest> itemRequest = itemRequestRepository.findById(itemRequestId);
+        if  (itemRequest.isPresent()) {
+            log.info("Запрос вещи c id = {} найдена", itemRequestId);
+            return itemRequest.get();
+        }
+        log.warn("Запрос вещи с id = {} не найдена", itemRequestId);
+        throw new NotFoundException(String.format("Запрос вещи с id=%d не найдена", itemRequestId));
     }
 
     private void checkNewItem(Item item) {

@@ -14,9 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ItemRequestDto {
+public class ItemRequestWithItemsDto {
     Long id;
     String description;
     LocalDateTime created;
     Long requestorId;
+    List<ItemResponseDto> items;
 }
