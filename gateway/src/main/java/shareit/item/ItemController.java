@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import shareit.comment.dto.CommentCreateDto;
 import shareit.item.dto.ItemResponseDto;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
