@@ -92,14 +92,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Map<Long, List<Item>> getItemsWithRequest() {
-        return itemRepository.findByRepositoryIsNotNull()
+        return itemRepository.findByRequestIsNotNull()
                 .stream()
                 .collect(Collectors.groupingBy(el -> el.getRequest().getId()));
     }
 
     @Override
     public List<Item> getItemsByRequest(Long requestId) {
-        return itemRepository.findByRepositoryId(requestId);
+        return itemRepository.findByRequestId(requestId);
     }
 
     @Override
@@ -108,8 +108,8 @@ public class ItemServiceImpl implements ItemService {
         Item newItem = ItemMapper.toItem(newItemDto);
         checkNewItem(newItem);
         newItem.setOwner(checkUser(userId));
-        if (newItemDto.getRequest() != null) {
-            newItem.setRequest(checkItemRequest(newItemDto.getRequest()));
+        if (newItemDto.getRequestId() != null) {
+            newItem.setRequest(checkItemRequest(newItemDto.getRequestId()));
         }
         return ItemMapper.toItemDto(itemRepository.save(newItem));
     }

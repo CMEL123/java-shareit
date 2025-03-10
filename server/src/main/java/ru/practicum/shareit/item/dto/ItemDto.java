@@ -18,8 +18,8 @@ public class ItemDto {
     String name;
     String description;
     Boolean available;   //статус о том, доступна или нет вещь для аренды;
-    Long owner;          //владелец вещи;
-    Long request; //если вещь была создана по запросу другого пользователя, то в этом
+    Long ownerId;          //владелец вещи;
+    Long requestId; //если вещь была создана по запросу другого пользователя, то в этом
                          //   поле будет храниться ссылка на соответствующий запрос.
     List<BookingDto> bookings;
 
