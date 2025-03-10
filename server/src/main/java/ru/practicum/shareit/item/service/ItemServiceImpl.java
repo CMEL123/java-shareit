@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto create(ItemDto newItemDto, Long userId) {
+    public ItemDto create(ItemResponseDto newItemDto, Long userId) {
         Item newItem = ItemMapper.toItem(newItemDto);
         checkNewItem(newItem);
         newItem.setOwner(checkUser(userId));
@@ -116,7 +116,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto update(ItemDto newItemDto, Long id, Long userId) {
+    public ItemDto update(ItemResponseDto newItemDto, Long id, Long userId) {
         Item newItem = ItemMapper.toItem(newItemDto);
         Item oldItem = checkItem(id);
         oldItem.setOwner(checkUser(userId));

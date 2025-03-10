@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.comment.dto.CommentCreateDto;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingsCommentsDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -35,13 +36,13 @@ public class ItemController {
     }
 
     @PostMapping()
-    public ItemDto create(@Valid @RequestBody ItemDto item,
+    public ItemDto create(@Valid @RequestBody ItemResponseDto item,
                           @RequestHeader(value = userIdHeader) Long userId) {
         return itemService.create(item, userId);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@Valid @RequestBody ItemDto item,
+    public ItemDto update(@Valid @RequestBody ItemResponseDto item,
                           @RequestHeader(value = userIdHeader) Long userId,
                           @PathVariable Long id) {
         return itemService.update(item, id, userId);
