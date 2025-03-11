@@ -153,7 +153,7 @@ public class ItemServiceImpl implements ItemService {
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
 
-    private User checkUser(Long userId) {
+    User checkUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if  (user.isPresent()) {
             log.info("Пользователь c id = {} найден", userId);
@@ -173,7 +173,7 @@ public class ItemServiceImpl implements ItemService {
         throw new NotFoundException(String.format("Вещь с id=%d не найдена", itemId));
     }
 
-    private ItemRequest checkItemRequest(Long itemRequestId) {
+    ItemRequest checkItemRequest(Long itemRequestId) {
         Optional<ItemRequest> itemRequest = itemRequestRepository.findById(itemRequestId);
         if  (itemRequest.isPresent()) {
             log.info("Запрос вещи c id = {} найдена", itemRequestId);

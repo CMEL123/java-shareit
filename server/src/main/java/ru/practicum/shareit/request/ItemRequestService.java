@@ -67,7 +67,7 @@ public class ItemRequestService {
         return itemRequestDtos;
     }
 
-    private User checkUser(Long userId) {
+    User checkUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if  (user.isPresent()) {
             log.info("Пользователь c id = {} найден", userId);
@@ -77,7 +77,7 @@ public class ItemRequestService {
         throw new NotFoundException(String.format("Пользователь с id=%d не найден", userId));
     }
 
-    private ItemRequest checkItemRequest(Long itemRequestId) {
+    ItemRequest checkItemRequest(Long itemRequestId) {
         Optional<ItemRequest> itemRequest = itemRequestRepository.findById(itemRequestId);
         if (itemRequest.isPresent()) {
             log.info("Запрос вещи c id = {} найдено", itemRequestId);

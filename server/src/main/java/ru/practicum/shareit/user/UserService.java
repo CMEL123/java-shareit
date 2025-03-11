@@ -63,10 +63,11 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public UserDto delete(Long id) {
         UserDto userDto = findById(id);
         userRepository.delete(UserMapper.toUser(userDto));
         log.info("Пользователь с id = {}  - удален", id);
+        return userDto;
     }
 
     private void checkEmail(User currUser) {
