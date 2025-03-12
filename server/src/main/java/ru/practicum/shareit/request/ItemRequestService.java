@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestWithItemsDto;
@@ -16,6 +16,7 @@ import ru.practicum.shareit.user.UserRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -25,7 +26,7 @@ import java.util.Optional;
 public class ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserRepository userRepository;
-    private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
     @Transactional
     public ItemRequestDto create(ItemRequestCreateDto itemRequestCreateDto, Long requestorId) {
@@ -37,8 +38,20 @@ public class ItemRequestService {
 
     public List<ItemRequestWithItemsDto> findByUserId(Long requestorId) {
         checkUser(requestorId);
-        Map<Long, List<Item>> hashMap = itemService.getItemsWithRequest();
-        List<ItemRequestWithItemsDto> itemRequestDtos = itemRequestRepository.findByRequestorIdOrderByCreatedDesc(requestorId)
+
+        List<ItemRequest> itemRequests = itemRequestRepository.findByRequestorIdOrderByCreatedDesc(requestorId);
+        if (itemRequests.isEmpty()) {
+            log.info("Запросы пользователя c id = {} не найдены", requestorId);
+            return List.of();
+        }
+
+        List<Long> itemRequestIds = itemRequests.stream()
+                .map(ItemRequest::getId)
+                .toList();
+        Map<Long, List<Item>> hashMap = itemRepository.findByRequestIdIsIn(itemRequestIds)
+                .stream()
+                .collect(Collectors.groupingBy(el -> el.getRequest().getId()));
+        List<ItemRequestWithItemsDto> itemRequestDtos = itemRequests
                 .stream()
                 .map(el -> ItemRequestMapper.toItemRequestWithItemsDto(el, hashMap.get(el.getId())))
                 .toList();
@@ -49,7 +62,7 @@ public class ItemRequestService {
     public ItemRequestWithItemsDto findById(Long requestId) {
         Optional<ItemRequest> itemRequest = itemRequestRepository.findById(requestId);
         if (itemRequest.isPresent()) {
-            List<Item> items = itemService.getItemsByRequest(requestId);
+            List<Item> items = itemRepository.findByRequestId(requestId);
             log.info("Запрос вещи c id = {} найден", requestId);
             return ItemRequestMapper.toItemRequestWithItemsDto(itemRequest.get(), items);
         }
@@ -77,13 +90,4 @@ public class ItemRequestService {
         throw new NotFoundException(String.format("Пользователь с id=%d не найден", userId));
     }
 
-    ItemRequest checkItemRequest(Long itemRequestId) {
-        Optional<ItemRequest> itemRequest = itemRequestRepository.findById(itemRequestId);
-        if (itemRequest.isPresent()) {
-            log.info("Запрос вещи c id = {} найдено", itemRequestId);
-            return itemRequest.get();
-        }
-        log.warn("Запрос вещи с id = {} не найдено", itemRequestId);
-        throw new NotFoundException(String.format("Запрос вещи с id=%d не найдено", itemRequestId));
-    }
 }

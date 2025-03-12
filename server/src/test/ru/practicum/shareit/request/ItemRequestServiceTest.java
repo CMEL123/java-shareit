@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestWithItemsDto;
@@ -16,9 +16,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +34,7 @@ class ItemRequestServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private ItemService itemService;
+    private ItemRepository itemRepository;
 
     @InjectMocks
     private ItemRequestService itemRequestService;
@@ -80,8 +78,8 @@ class ItemRequestServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRequestRepository.findByRequestorIdOrderByCreatedDesc(anyLong()))
                 .thenReturn(List.of(itemRequest));
-        when(itemService.getItemsWithRequest())
-                .thenReturn(Map.of(1L, List.of(item)));
+        when(itemRepository.findByRequestIdIsIn(anyList()))
+                .thenReturn(List.of(item));
 
         List<ItemRequestWithItemsDto> result = itemRequestService.findByUserId(1L);
 
@@ -93,7 +91,7 @@ class ItemRequestServiceTest {
     @Test
     void testFindById() {
         when(itemRequestRepository.findById(anyLong())).thenReturn(Optional.of(itemRequest));
-        when(itemService.getItemsByRequest(anyLong())).thenReturn(List.of(item));
+        when(itemRepository.findByRequestId(anyLong())).thenReturn(List.of(item));
 
         ItemRequestWithItemsDto result = itemRequestService.findById(1L);
 
@@ -127,13 +125,5 @@ class ItemRequestServiceTest {
 
         assertThrows(NotFoundException.class,
                 () -> itemRequestService.checkUser(1L));
-    }
-
-    @Test
-    void testCheckItemRequestNotFound() {
-        when(itemRequestRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class,
-                () -> itemRequestService.checkItemRequest(1L));
     }
 }

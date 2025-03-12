@@ -149,16 +149,6 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void testGetItemsByRequest() {
-        when(itemRepository.findByRequestId(any())).thenReturn(List.of(item));
-
-        List<Item> result = itemService.getItemsByRequest(1L);
-
-        assertEquals(1, result.size());
-        assertEquals(itemId, result.getFirst().getId());
-    }
-
-    @Test
     void testCheckItemRequestValidation() {
         when(itemRequestRepository.findById(any())).thenReturn(Optional.empty());
 

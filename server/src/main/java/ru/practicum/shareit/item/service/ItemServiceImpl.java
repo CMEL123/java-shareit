@@ -25,10 +25,8 @@ import ru.practicum.shareit.comment.CommentMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,18 +86,6 @@ public class ItemServiceImpl implements ItemService {
                 .filter(item -> item.getAvailable() != null && item.getAvailable())
                 .map(ItemMapper::toItemDto)
                 .toList();
-    }
-
-    @Override
-    public Map<Long, List<Item>> getItemsWithRequest() {
-        return itemRepository.findByRequestIsNotNull()
-                .stream()
-                .collect(Collectors.groupingBy(el -> el.getRequest().getId()));
-    }
-
-    @Override
-    public List<Item> getItemsByRequest(Long requestId) {
-        return itemRepository.findByRequestId(requestId);
     }
 
     @Override
